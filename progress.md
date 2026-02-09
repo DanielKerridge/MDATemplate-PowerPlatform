@@ -170,3 +170,41 @@ Verified GAP-010 by clicking +New in MDA:
 - Gaps won't-fix: 1 (GAP-008 - host header)
 - Gaps remaining: 3
 
+---
+
+## Iteration 4 — 2026-02-09T12:00:00Z
+
+### Gaps Fixed This Iteration
+
+**GAP-002: Command bar missing Excel buttons** (command-bar, severity 3) — **DONE**
+- Before: Missing Excel Templates and Export to Excel buttons
+- After: Added both buttons with icons (TableRegular, ArrowDownloadRegular) and dropdown chevrons
+- Also added missing chevrons to Email a Link and Share buttons
+- Files changed: `code-app/src/components/common/EntityCommandBar.tsx`
+
+**GAP-011: Delete button missing dropdown chevron** (command-bar, severity 3) — **DONE**
+- Before: Delete button had no dropdown chevron
+- After: Delete button now has ChevronDownRegular matching MDA
+- Files changed: `code-app/src/components/common/EntityCommandBar.tsx`
+
+### Deploy + Smoke Test
+
+- **Deploy**: SUCCESS via `pac code push -s "MDA Template"`
+- **Smoke test**: PASS
+  - Hard-refreshed Code App, navigated to Projects list
+  - Command bar buttons match MDA order: ← | Show Chart | + New | Delete ˅ | Refresh | Visualize this view | Email a Link ˅ | Flow ˅ | Run Report ˅ | Excel Templates ˅ | Export to Excel ˅ | ⋯ | Share ˅
+  - Delete has chevron confirmed
+  - At current viewport, Excel buttons flow into overflow (matching MDA behavior)
+  - No console errors
+
+### Next Candidates (by priority)
+
+1. **GAP-012** (navigation, severity 6): Add hamburger menu for nav collapse
+
+### Score
+
+- Gaps found: 12
+- Gaps fixed: 10 (GAP-001, GAP-002, GAP-003, GAP-004, GAP-005, GAP-006, GAP-007, GAP-009, GAP-010, GAP-011)
+- Gaps won't-fix: 1 (GAP-008 - host header)
+- Gaps remaining: 1
+

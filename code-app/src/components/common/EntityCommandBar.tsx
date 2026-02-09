@@ -13,6 +13,8 @@ import {
   MailRegular,
   PlayRegular,
   DocumentRegular,
+  TableRegular,
+  ArrowDownloadRegular,
 } from "@fluentui/react-icons";
 
 export interface CommandBarAction {
@@ -138,7 +140,7 @@ export function EntityCommandBar({
         </button>
       ))}
 
-      {/* Delete — appears active like MDA (enabled when onDelete provided) */}
+      {/* Delete — with dropdown chevron like MDA */}
       {showMDAActions && (
         <button
           className={styles.btn}
@@ -147,6 +149,7 @@ export function EntityCommandBar({
         >
           <span className={styles.btnIcon}><DeleteRegular /></span>
           <span>Delete</span>
+          <span className={styles.chevron}><ChevronDownRegular /></span>
         </button>
       )}
 
@@ -170,6 +173,7 @@ export function EntityCommandBar({
           <button className={styles.btn} type="button">
             <span className={styles.btnIcon}><MailRegular /></span>
             <span>Email a Link</span>
+            <span className={styles.chevron}><ChevronDownRegular /></span>
           </button>
           <button className={styles.btn} type="button">
             <span className={styles.btnIcon}><PlayRegular /></span>
@@ -179,6 +183,16 @@ export function EntityCommandBar({
           <button className={styles.btn} type="button">
             <span className={styles.btnIcon}><DocumentRegular /></span>
             <span>Run Report</span>
+            <span className={styles.chevron}><ChevronDownRegular /></span>
+          </button>
+          <button className={styles.btn} type="button">
+            <span className={styles.btnIcon}><TableRegular /></span>
+            <span>Excel Templates</span>
+            <span className={styles.chevron}><ChevronDownRegular /></span>
+          </button>
+          <button className={styles.btn} type="button">
+            <span className={styles.btnIcon}><ArrowDownloadRegular /></span>
+            <span>Export to Excel</span>
             <span className={styles.chevron}><ChevronDownRegular /></span>
           </button>
         </>
@@ -196,6 +210,7 @@ export function EntityCommandBar({
         <button className={styles.btn} type="button">
           <span className={styles.btnIcon}><ShareRegular /></span>
           <span>Share</span>
+          <span className={styles.chevron}><ChevronDownRegular /></span>
         </button>
       )}
     </div>

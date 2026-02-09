@@ -19,11 +19,11 @@
     "severity": 3,
     "reproSteps": "1. Open Projects list in both apps. 2. Compare command bar buttons.",
     "expected": "MDA: Back, Show Chart, +New, Delete v, Refresh, Visualize, Email a Link v, Flow v, Run Report v, Excel Templates v, Export to Excel v, ..., Share v",
-    "actual": "Code App: Back, Show Chart, +New, Delete, Refresh, Visualize this view, Email a Link, Flow v, Run Report v, ..., Share. Missing: Excel Templates, Export to Excel.",
+    "actual": "Code App now: Back, Show Chart, +New, Delete v, Refresh, Visualize this view, Email a Link v, Flow v, Run Report v, Excel Templates v, Export to Excel v, ..., Share v. All MDA buttons present with matching chevrons.",
     "acceptanceCriteria": "Command bar has all MDA buttons in the same order with matching dropdowns",
-    "status": "open",
-    "notes": "Most buttons present but Excel-related ones missing. Some dropdown chevrons differ.",
-    "lastUpdated": "2026-02-09T10:00:00Z"
+    "status": "done",
+    "notes": "Fixed in iteration 4. Added Excel Templates and Export to Excel buttons with dropdown chevrons. Also added chevrons to Email a Link, Delete, and Share buttons.",
+    "lastUpdated": "2026-02-09T12:00:00Z"
   },
   {
     "id": "GAP-003",
@@ -136,11 +136,11 @@
     "severity": 3,
     "reproSteps": "1. Compare Delete button in command bar.",
     "expected": "MDA: Delete button has a small dropdown chevron next to it.",
-    "actual": "Code App: Delete button has no dropdown chevron.",
+    "actual": "Code App now: Delete button has dropdown chevron matching MDA.",
     "acceptanceCriteria": "Delete button matches MDA styling with dropdown",
-    "status": "open",
-    "notes": "In MDA, Delete button has a small v chevron.",
-    "lastUpdated": "2026-02-09T10:00:00Z"
+    "status": "done",
+    "notes": "Fixed in iteration 4. Added ChevronDownRegular to Delete button.",
+    "lastUpdated": "2026-02-09T12:00:00Z"
   },
   {
     "id": "GAP-012",
