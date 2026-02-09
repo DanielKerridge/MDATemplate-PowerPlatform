@@ -7,7 +7,6 @@ import { EntityListView } from "@/components/views/EntityListView";
 import type { ColumnDef } from "@/components/views/EntityListView";
 import { EntityCommandBar } from "@/components/common/EntityCommandBar";
 import { StatusBadge } from "@/components/common/StatusBadge";
-import { useAppStore } from "@/store/useAppStore";
 import type { Pic_projects } from "@generated/models/Pic_projectsModel";
 
 const VIEWS = [
@@ -59,7 +58,6 @@ const COLUMNS: ColumnDef<Pic_projects>[] = [
 
 export function ProjectList() {
   const navigate = useNavigate();
-  const openQuickCreate = useAppStore((s) => s.openQuickCreate);
   const [activeView, setActiveView] = useState("active");
 
   const currentView = VIEWS.find((v) => v.key === activeView) ?? VIEWS[0];
@@ -92,7 +90,7 @@ export function ProjectList() {
             label: "New",
             icon: AddRegular,
             primary: true,
-            onClick: () => openQuickCreate("project"),
+            onClick: () => navigate("/projects/new"),
           },
         ]}
         onRefresh={() => refetch()}

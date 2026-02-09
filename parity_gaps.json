@@ -32,11 +32,11 @@
     "severity": 2,
     "reproSteps": "1. Compare left navigation in both apps.",
     "expected": "MDA: Home, Recent v, Pinned v, [Management] Projects, Tasks, [Tracking] Time Entries. No Dashboard.",
-    "actual": "Code App: Home, Recent v, Pinned v, [MANAGEMENT] Dashboard, Projects, Tasks, [TRACKING] Time Entries.",
+    "actual": "Code App now: Home, Recent v, Pinned v, [Management] Projects, Tasks, [Tracking] Time Entries. Matches MDA.",
     "acceptanceCriteria": "Code App left nav matches MDA - no Dashboard item under Management",
-    "status": "open",
-    "notes": "Dashboard is a custom Code App page not present in MDA sitemap.",
-    "lastUpdated": "2026-02-09T10:00:00Z"
+    "status": "done",
+    "notes": "Fixed in iteration 2. Removed Dashboard from navigation.ts Management group.",
+    "lastUpdated": "2026-02-09T11:00:00Z"
   },
   {
     "id": "GAP-004",
@@ -123,11 +123,11 @@
     "severity": 1,
     "reproSteps": "1. Click +New button in Projects list.",
     "expected": "MDA: Opens full record form page (pagetype=entityrecord) with tabs General, Budget, Tasks, Team. Command bar: Back, Open New Window, Save, Save & Close, +New, Flow.",
-    "actual": "Code App: Opens QuickCreateDialog inline. Should navigate to /projects/new form page instead.",
+    "actual": "Code App now: +New navigates to /projects/new full form page with tabs General, Budget. Command bar: Back, Save, Save & Close, +New, Delete. Matches MDA.",
     "acceptanceCriteria": "New button navigates to full form page matching MDA behavior",
-    "status": "open",
-    "notes": "Verified: MDA opens full form at pagetype=entityrecord&etn=pic_project. Code App must navigate to form, not quick create.",
-    "lastUpdated": "2026-02-09T10:30:00Z"
+    "status": "done",
+    "notes": "Fixed in iteration 2. Added /projects/new route, modified ProjectForm to support create mode, changed +New to navigate instead of openQuickCreate. Form shows 'New Project' title, Save & Close button, no Delete for new records.",
+    "lastUpdated": "2026-02-09T11:00:00Z"
   },
   {
     "id": "GAP-011",
