@@ -208,3 +208,39 @@ Verified GAP-010 by clicking +New in MDA:
 - Gaps won't-fix: 1 (GAP-008 - host header)
 - Gaps remaining: 1
 
+---
+
+## Iteration 5 — 2026-02-09T12:30:00Z
+
+### Gaps Fixed This Iteration
+
+**GAP-012: Hamburger menu for nav collapse** (navigation, severity 6) — **DONE**
+- Before: Nav was always 220px wide, no collapse mechanism
+- After: Hamburger icon (≡) at top of left nav using NavigationRegular icon
+- Click collapses to 48px icons-only mode with smooth CSS transition (0.15s ease)
+- Labels, group headers, section chevrons, and empty hints hidden when collapsed
+- Nav items show tooltips when collapsed for accessibility
+- Area switcher shows icon-only when collapsed
+- Click hamburger again expands back to full 220px with labels
+- Files changed: `code-app/src/components/layout/LeftNav.tsx` (added collapsed state, hamburger button, rootCollapsed style, labelHidden class, conditional rendering)
+
+### Deploy + Smoke Test
+
+- **Deploy**: SUCCESS via `pac code push -s "MDA Template"`
+- **Smoke test**: PASS
+  - Hard-refreshed Code App
+  - Hamburger icon visible at top of nav
+  - Clicked hamburger — nav collapsed to icons-only (48px)
+  - All icons visible in collapsed mode: Home, Recent, Pinned, Projects, Tasks, Time Entries
+  - Content area expanded to fill freed space
+  - Clicked hamburger again — nav expanded back to full width with labels
+  - No console errors
+
+### Final Score
+
+- Gaps found: 12
+- Gaps fixed: 11 (GAP-001, GAP-002, GAP-003, GAP-004, GAP-005, GAP-006, GAP-007, GAP-009, GAP-010, GAP-011, GAP-012)
+- Gaps won't-fix: 1 (GAP-008 - host header bar color, outside Code App control)
+- **Gaps remaining: 0**
+- **PARITY COMPLETE** — All fixable gaps resolved across 5 iterations
+

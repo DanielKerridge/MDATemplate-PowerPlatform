@@ -149,10 +149,10 @@
     "severity": 6,
     "reproSteps": "1. Compare top of left nav.",
     "expected": "MDA: Has a hamburger (3 lines) menu icon at top left of nav to collapse.",
-    "actual": "Code App: No hamburger menu. Nav is always full width.",
+    "actual": "Code App now: Hamburger icon (≡) at top of nav. Click collapses to 48px icons-only mode. Click again expands to 220px with labels. Smooth CSS transition. Matches MDA.",
     "acceptanceCriteria": "Left nav has collapse/expand hamburger like MDA",
-    "status": "open",
-    "notes": "MDA nav can be collapsed to icons-only mode via hamburger.",
-    "lastUpdated": "2026-02-09T10:00:00Z"
+    "status": "done",
+    "notes": "Fixed in iteration 5. Added NavigationRegular hamburger icon, collapsed state (48px width), hide labels/group headers/chevrons when collapsed, title tooltips on icons.",
+    "lastUpdated": "2026-02-09T12:30:00Z"
   }
 ]

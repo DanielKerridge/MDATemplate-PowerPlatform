@@ -11,10 +11,12 @@ import {
   HomeRegular,
   ClockRegular,
   PinRegular,
+  NavigationRegular,
 } from "@fluentui/react-icons";
 import { NAVIGATION } from "@/config/navigation";
 
 const NAV_WIDTH = 220;
+const NAV_COLLAPSED_WIDTH = 48;
 const NAV_BG = "#FFFFFF";
 const NAV_HOVER = "#F5F5F5";
 const NAV_ACTIVE_BG = "#FFFFFF";
@@ -36,12 +38,38 @@ const useStyles = makeStyles({
     userSelect: "none",
     overflow: "hidden",
     borderRight: "1px solid #E0E0E0",
+    transitionProperty: "width, min-width",
+    transitionDuration: "0.15s",
+    transitionTimingFunction: "ease",
+  },
+  rootCollapsed: {
+    width: `${NAV_COLLAPSED_WIDTH}px`,
+    minWidth: `${NAV_COLLAPSED_WIDTH}px`,
+  },
+  hamburger: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "40px",
+    height: "32px",
+    cursor: "pointer",
+    color: NAV_TEXT_DIM,
+    margin: "2px 4px 0",
+    borderRadius: "4px",
+    flexShrink: 0,
+    ":hover": {
+      backgroundColor: NAV_HOVER,
+      color: NAV_TEXT,
+    },
+  },
+  hamburgerIcon: {
+    fontSize: "18px",
   },
   content: {
     flex: 1,
     overflowY: "auto",
     overflowX: "hidden",
-    paddingTop: "4px",
+    paddingTop: "0px",
   },
   navItem: {
     display: "flex",
@@ -153,12 +181,16 @@ const useStyles = makeStyles({
     fontWeight: 600,
     backgroundColor: NAV_ACTIVE_BG,
   },
+  labelHidden: {
+    display: "none",
+  },
 });
 
 export function LeftNav() {
   const styles = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
+  const [collapsed, setCollapsed] = useState(false);
   const [activeAreaKey, setActiveAreaKey] = useState("projects");
   const [areaMenuOpen, setAreaMenuOpen] = useState(false);
   const [recentOpen, setRecentOpen] = useState(false);
@@ -172,7 +204,16 @@ export function LeftNav() {
     (path !== "/" && location.pathname.startsWith(path));
 
   return (
-    <div className={styles.root}>
+    <div className={mergeClasses(styles.root, collapsed && styles.rootCollapsed)}>
+      {/* Hamburger toggle */}
+      <div
+        className={styles.hamburger}
+        onClick={() => setCollapsed(!collapsed)}
+        title={collapsed ? "Expand navigation" : "Collapse navigation"}
+      >
+        <NavigationRegular className={styles.hamburgerIcon} />
+      </div>
+
       <div className={styles.content}>
         {/* Built-in: Home */}
         <div
@@ -188,7 +229,7 @@ export function LeftNav() {
               location.pathname === "/" && styles.navIconActive
             )}
           />
-          <span>Home</span>
+          <span className={collapsed ? styles.labelHidden : undefined}>Home</span>
         </div>
 
         {/* Built-in: Recent (collapsible) */}
@@ -198,34 +239,34 @@ export function LeftNav() {
         >
           <div className={styles.sectionLeft}>
             <ClockRegular className={styles.navIcon} />
-            <span>Recent</span>
+            <span className={collapsed ? styles.labelHidden : undefined}>Recent</span>
           </div>
-          {recentOpen ? (
+          {!collapsed && (recentOpen ? (
             <ChevronUpRegular className={styles.sectionChevron} />
           ) : (
             <ChevronDownRegular className={styles.sectionChevron} />
-          )}
+          ))}
         </div>
-        {recentOpen && (
+        {recentOpen && !collapsed && (
           <div className={styles.emptyHint}>No recent items</div>
         )}
 
         {/* Built-in: Pinned (collapsible) */}
         <div
           className={styles.sectionHeader}
-          onClick={() => setPinnedOpen(!pinnedOpen)}
+          onClick={() => !collapsed && setPinnedOpen(!pinnedOpen)}
         >
           <div className={styles.sectionLeft}>
             <PinRegular className={styles.navIcon} />
-            <span>Pinned</span>
+            <span className={collapsed ? styles.labelHidden : undefined}>Pinned</span>
           </div>
-          {pinnedOpen ? (
+          {!collapsed && (pinnedOpen ? (
             <ChevronUpRegular className={styles.sectionChevron} />
           ) : (
             <ChevronDownRegular className={styles.sectionChevron} />
-          )}
+          ))}
         </div>
-        {pinnedOpen && (
+        {pinnedOpen && !collapsed && (
           <div className={styles.emptyHint}>No pinned items</div>
         )}
 
@@ -234,7 +275,7 @@ export function LeftNav() {
         {/* Area-specific navigation groups */}
         {currentArea.groups.map((group) => (
           <div key={group.key}>
-            <div className={styles.groupHeader}>{group.label}</div>
+            {!collapsed && <div className={styles.groupHeader}>{group.label}</div>}
             {group.items.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.path);
@@ -246,6 +287,7 @@ export function LeftNav() {
                     active && styles.navItemActive
                   )}
                   onClick={() => navigate(item.path)}
+                  title={collapsed ? item.label : undefined}
                 >
                   <Icon
                     className={mergeClasses(
@@ -253,7 +295,7 @@ export function LeftNav() {
                       active && styles.navIconActive
                     )}
                   />
-                  <span>{item.label}</span>
+                  <span className={collapsed ? styles.labelHidden : undefined}>{item.label}</span>
                 </div>
               );
             })}
@@ -263,7 +305,7 @@ export function LeftNav() {
 
       {/* Area switcher at bottom */}
       <div className={styles.areaSwitcher}>
-        {areaMenuOpen && (
+        {areaMenuOpen && !collapsed && (
           <div className={styles.areaMenu}>
             {NAVIGATION.map((area) => {
               const Icon = area.icon;
@@ -290,13 +332,14 @@ export function LeftNav() {
         )}
         <div
           className={styles.areaButton}
-          onClick={() => setAreaMenuOpen(!areaMenuOpen)}
+          onClick={() => !collapsed && setAreaMenuOpen(!areaMenuOpen)}
+          title={collapsed ? currentArea.label : undefined}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <currentArea.icon style={{ fontSize: 16 }} />
-            <span>{currentArea.label}</span>
+            <span className={collapsed ? styles.labelHidden : undefined}>{currentArea.label}</span>
           </div>
-          <ChevronUpDownRegular style={{ fontSize: 16 }} />
+          {!collapsed && <ChevronUpDownRegular style={{ fontSize: 16 }} />}
         </div>
       </div>
     </div>
