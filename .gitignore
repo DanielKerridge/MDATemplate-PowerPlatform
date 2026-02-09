@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.vite/
+*.log
+.env
+.env.*
+nul
+.DS_Store
+Thumbs.db
+*.tsbuildinfo
+comparisonimages/
+*.html
+*_files/
