@@ -84,11 +84,11 @@
     "severity": 2,
     "reproSteps": "1. Open Projects list with data. 2. Try to select rows.",
     "expected": "MDA: Rows have checkboxes for single/multi-select. Header has select-all.",
-    "actual": "Code App: No checkboxes. Row click navigates to form.",
+    "actual": "Code App now: Checkbox column on left with select-all header. Rows highlight blue when selected. Checkbox click selects without navigating; row content click navigates to form.",
     "acceptanceCriteria": "Grid rows have checkboxes matching MDA selection behavior",
-    "status": "open",
-    "notes": "Significant UX gap. MDA multi-select enables bulk operations.",
-    "lastUpdated": "2026-02-09T10:00:00Z"
+    "status": "done",
+    "notes": "Fixed in iteration 3. Added checkbox column to EntityListView with select-all, individual toggle, blue highlight for selected rows.",
+    "lastUpdated": "2026-02-09T11:30:00Z"
   },
   {
     "id": "GAP-008",

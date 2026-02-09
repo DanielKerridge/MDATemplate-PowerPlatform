@@ -6,6 +6,7 @@ import {
   Input,
   Spinner,
   Button,
+  Checkbox,
   Menu,
   MenuTrigger,
   MenuPopover,
@@ -129,6 +130,28 @@ const useStyles = makeStyles({
     borderCollapse: "collapse",
     fontSize: "14px",
   },
+  thCheckbox: {
+    width: "40px",
+    minWidth: "40px",
+    maxWidth: "40px",
+    textAlign: "center",
+    padding: "0",
+    height: "42px",
+    backgroundColor: "#fff",
+    borderBottom: "1px solid rgba(189,195,199,0.58)",
+    position: "sticky" as const,
+    top: 0,
+    zIndex: 1,
+  },
+  tdCheckbox: {
+    width: "40px",
+    minWidth: "40px",
+    maxWidth: "40px",
+    textAlign: "center",
+    padding: "0",
+    height: "42px",
+    borderBottom: "1px solid rgba(189,195,199,0.58)",
+  },
   th: {
     textAlign: "left",
     padding: "0 12px",
@@ -175,6 +198,12 @@ const useStyles = makeStyles({
     cursor: "pointer",
     ":hover": {
       backgroundColor: "#f3f2f1",
+    },
+  },
+  rowSelected: {
+    backgroundColor: "#e6f2fb",
+    ":hover": {
+      backgroundColor: "#deecf9",
     },
   },
   primaryLink: {
@@ -260,6 +289,7 @@ export function EntityListView<T>({
   const [sortCol, setSortCol] = useState<string | null>(null);
   const [sortAsc, setSortAsc] = useState(true);
   const [page, setPage] = useState(0);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const pageSize = APP_CONFIG.DEFAULT_PAGE_SIZE;
 
@@ -298,6 +328,41 @@ export function EntityListView<T>({
     setPage(0);
     onSearch?.(value);
   };
+
+  const toggleSelect = (rowId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(rowId)) next.delete(rowId);
+      else next.add(rowId);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    const pageIds = pagedData.map((r) =>
+      String((r as Record<string, unknown>)[idField])
+    );
+    const allSelected = pageIds.length > 0 && pageIds.every((id) => selectedIds.has(id));
+    if (allSelected) {
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        pageIds.forEach((id) => next.delete(id));
+        return next;
+      });
+    } else {
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        pageIds.forEach((id) => next.add(id));
+        return next;
+      });
+    }
+  };
+
+  const pageIds = pagedData.map((r) =>
+    String((r as Record<string, unknown>)[idField])
+  );
+  const allPageSelected = pageIds.length > 0 && pageIds.every((id) => selectedIds.has(id));
 
   return (
     <div className={styles.root}>
@@ -367,6 +432,13 @@ export function EntityListView<T>({
             <table className={styles.table}>
               <thead>
                 <tr>
+                  <th className={styles.thCheckbox}>
+                    <Checkbox
+                      checked={allPageSelected ? true : selectedIds.size > 0 ? "mixed" : false}
+                      onChange={toggleSelectAll}
+                      size="medium"
+                    />
+                  </th>
                   {columns.map((col) => (
                     <th
                       key={col.key}
@@ -404,13 +476,32 @@ export function EntityListView<T>({
                           (row as Record<string, unknown>)[idField]
                         ) || String(i)
                       }
-                      className={styles.row}
+                      className={mergeClasses(
+                        styles.row,
+                        selectedIds.has(String((row as Record<string, unknown>)[idField])) && styles.rowSelected
+                      )}
                       onClick={() =>
                         navigate(
                           `${entityPath}/${(row as Record<string, unknown>)[idField]}`
                         )
                       }
                     >
+                      <td
+                        className={styles.tdCheckbox}
+                        onClick={(e) =>
+                          toggleSelect(
+                            String((row as Record<string, unknown>)[idField]),
+                            e
+                          )
+                        }
+                      >
+                        <Checkbox
+                          checked={selectedIds.has(
+                            String((row as Record<string, unknown>)[idField])
+                          )}
+                          size="medium"
+                        />
+                      </td>
                       {columns.map((col, ci) => (
                         <td key={col.key} className={styles.td}>
                           {ci === 0 ? (

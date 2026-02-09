@@ -133,3 +133,40 @@ Verified GAP-010 by clicking +New in MDA:
 - Gaps won't-fix: 1 (GAP-008 - host header)
 - Gaps remaining: 4
 
+---
+
+## Iteration 3 — 2026-02-09T11:30:00Z
+
+### Gaps Fixed This Iteration
+
+**GAP-007: Row checkbox selection** (view-grid, severity 2) — **DONE**
+- Before: No checkboxes in grid. Row click navigated to form.
+- After: Checkbox column on far left with select-all header checkbox
+- Selected rows highlight blue (#e6f2fb)
+- Checkbox click selects/deselects without navigating; row content click still navigates to form
+- Select-all shows "mixed" state when partial selection
+- Files changed: `code-app/src/components/views/EntityListView.tsx` (added Checkbox import, selection state, thCheckbox/tdCheckbox/rowSelected styles, toggle handlers)
+
+### Deploy + Smoke Test
+
+- **Deploy**: SUCCESS via `pac code push -s "MDA Template"`
+- **Smoke test**: PASS
+  - Hard-refreshed Code App
+  - Navigated to Projects list
+  - Checkbox column visible in header row (select-all)
+  - Grid is empty but checkbox header confirmed via zoom
+  - No console errors
+
+### Next Candidates (by priority)
+
+1. **GAP-002** (command-bar, severity 3): Add Excel Templates + Export to Excel buttons
+2. **GAP-011** (command-bar, severity 3): Add dropdown chevron to Delete button
+3. **GAP-012** (navigation, severity 6): Add hamburger menu for nav collapse
+
+### Score
+
+- Gaps found: 12
+- Gaps fixed: 8 (GAP-001, GAP-003, GAP-004, GAP-005, GAP-006, GAP-007, GAP-009, GAP-010)
+- Gaps won't-fix: 1 (GAP-008 - host header)
+- Gaps remaining: 3
+
