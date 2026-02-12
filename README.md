@@ -48,10 +48,6 @@ Plus 4 global option sets, 4 local option sets, 1 formula column, and 3 alternat
 
 ## Quick Start
 
-### Prerequisites
-
-1. **Enable Code Apps** in your environment — an admin must turn on Code App operations in the [Power Platform Admin Center](https://admin.powerplatform.microsoft.com/) under your environment's settings before `pac code push` will work.
-
 ### Option A: Deploy the Template As-Is
 
 Use this if you want to run the Project Management template in your own environment.
@@ -69,7 +65,7 @@ Use this if you want to run the Project Management template in your own environm
 
 ### Modifying the Code App
 
-If you want to customise the Code App frontend, clone the repo and deploy your changes:
+If you want to customise the Code App frontend, clone the repo and deploy your changes. An admin must first enable Code Apps in the [Power Platform Admin Center](https://admin.powerplatform.microsoft.com/) under your environment's settings.
 
 ```bash
 git clone https://github.com/DanielKerridge/MDATemplate-PowerPlatform.git
