@@ -2,7 +2,7 @@
 
 A standalone React Code App that replicates the full **Model-Driven App (MDA)** experience on the Power Platform. Built as a reusable template demonstrating all major MDA UI patterns powered by Dataverse.
 
-Built entirely with [Claude Code](https://claude.ai/claude-code) using the [Power Platform Skills for Claude Code](https://github.com/your-org/claude-code-power-platform-skills).
+Built entirely with [Claude Code](https://claude.ai/claude-code) using the [Power Platform Skills for Claude Code](https://github.com/DanielKerridge/claude-code-power-platform-skills).
 
 ## What It Does
 
@@ -55,12 +55,12 @@ Use this if you want to run the Project Management template in your own environm
 
 1. **Import the Dataverse schema**
    - Go to [Power Apps Maker Portal](https://make.powerapps.com/) > your environment > Solutions > Import
-   - Upload `solutions/MDATemplate_unmanaged.zip`
+   - Upload `solutions/MDATemplate_1_0_0_3.zip`
    - Follow the import wizard and publish all customizations
 
 2. **Clone and install**
    ```bash
-   git clone https://github.com/your-org/MDATemplate-PowerPlatform.git
+   git clone https://github.com/DanielKerridge/MDATemplate-PowerPlatform.git
    cd MDATemplate-PowerPlatform/code-app
    npm install
    ```
@@ -99,7 +99,7 @@ Use this if you want to run the Project Management template in your own environm
 
 ### Option B: Build Your Own MDA with Claude Code
 
-Use the [Power Platform Skills for Claude Code](https://github.com/your-org/claude-code-power-platform-skills) to build a completely new MDA from scratch. The skills provide Claude Code with deep Power Platform knowledge to:
+Use the [Power Platform Skills for Claude Code](https://github.com/DanielKerridge/claude-code-power-platform-skills) to build a completely new MDA from scratch. The skills provide Claude Code with deep Power Platform knowledge to:
 
 1. **Plan** your app with an Agent Team (Data Architect + UX Designer + Skeptic)
 2. **Build the Dataverse schema** (tables, columns, relationships, views, forms) via the Web API
@@ -150,7 +150,7 @@ To adapt this template for a different domain (e.g., CRM, HR, Asset Management):
 6. **Generate new services** — Run `pac code add-datasource` for each table
 7. **Deploy** — `npm run build` and `pac code push`
 
-Or just point Claude Code at this repo with the [Power Platform Skills](https://github.com/your-org/claude-code-power-platform-skills) installed and ask it to build what you need.
+Or just point Claude Code at this repo with the [Power Platform Skills](https://github.com/DanielKerridge/claude-code-power-platform-skills) installed and ask it to build what you need.
 
 ## License
 
