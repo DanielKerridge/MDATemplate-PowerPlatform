@@ -60,33 +60,27 @@ Use this if you want to run the Project Management template in your own environm
    - Go to [Power Apps Maker Portal](https://make.powerapps.com/) > your environment > Solutions > Import
    - Upload `solutions/MDATemplate_1_0_0_3.zip`
    - Follow the import wizard and publish all customizations
+   - This imports the full schema (tables, columns, relationships, views, forms) and the Code App
 
-2. **Create sample data**
-   - Open the imported **MDA Template** Model-Driven App from the Apps area
-   - Navigate to **Team Members** and create a few team members (name, role, email, department)
-   - Navigate to **Categories** and create categories (e.g., Development, Design, Testing)
-   - You can now create Projects, Tasks, Time Entries, and Assignments that reference these records
+2. **Create your data**
+   - Open the **MDA Template** app from the Apps area
+   - Start by creating **Team Members** and **Categories** — these are referenced by other records
+   - Then create Projects, Tasks, Time Entries, and Assignments
 
-3. **Clone and install the Code App**
-   ```bash
-   git clone https://github.com/DanielKerridge/MDATemplate-PowerPlatform.git
-   cd MDATemplate-PowerPlatform/code-app
-   npm install
-   ```
+### Modifying the Code App
 
-4. **Configure environment**
-   ```bash
-   cp power.config.json.example power.config.json
-   ```
-   Edit `power.config.json` — replace `YOUR_APP_ID` and `YOUR_ENVIRONMENT_ID` with your values from the Power Apps maker portal.
+If you want to customise the Code App frontend, clone the repo and deploy your changes:
 
-5. **Authenticate and deploy**
-   ```bash
-   pac auth create --environment https://yourorg.crm.dynamics.com/
-   ```
-   ```powershell
-   .\scripts\deploy.ps1 -Environment "https://yourorg.crm.dynamics.com/"
-   ```
+```bash
+git clone https://github.com/DanielKerridge/MDATemplate-PowerPlatform.git
+cd MDATemplate-PowerPlatform/code-app
+npm install
+cp power.config.json.example power.config.json
+# Edit power.config.json with your APP_ID and ENVIRONMENT_ID
+pac auth create --environment https://yourorg.crm.dynamics.com/
+npm run build
+pac code push -s "MDA Template"
+```
 
 ### Option B: Build Your Own MDA with Claude Code
 
