@@ -84,13 +84,22 @@ pac code push -s "MDA Template"
 
 ### Option B: Build Your Own MDA with Claude Code
 
-Use the [Power Platform Skills for Claude Code](https://github.com/DanielKerridge/claude-code-power-platform-skills) to build a completely new MDA from scratch. The skills provide Claude Code with deep Power Platform knowledge to:
+Use the [Power Platform Skills for Claude Code](https://github.com/DanielKerridge/claude-code-power-platform-skills) to build a completely new MDA from scratch.
 
-1. **Plan** your app with an Agent Team (Data Architect + UX Designer + Skeptic)
-2. **Build the Dataverse schema** (tables, columns, relationships, views, forms) via the Web API
-3. **Build the React frontend** using the @microsoft/power-apps SDK
-4. **Review** the code for dead wiring, missing features, and security issues
-5. **Test** visually with AI-powered screenshot comparison
+1. **Download this solution** as a reference — import `solutions/MDATemplate_1_0_0_3.zip` into a dev environment so Claude can see a working example
+2. **Install the skills** into your new project:
+   ```bash
+   git clone https://github.com/DanielKerridge/claude-code-power-platform-skills.git
+   mkdir -p .claude/skills
+   cp -r claude-code-power-platform-skills/* .claude/skills/
+   ```
+3. **Tell Claude Code what you want** — e.g., *"Plan me a CRM app with Accounts, Contacts, and Opportunities"*
+4. Claude Code uses the skills to:
+   - **Plan** your app with an Agent Team (Data Architect + UX Designer + Skeptic)
+   - **Build the Dataverse schema** (tables, columns, relationships, views, forms) via the Web API
+   - **Build the React frontend** using the @microsoft/power-apps SDK
+   - **Review** the code for dead wiring, missing features, and security issues
+   - **Test** visually with AI-powered screenshot comparison
 
 This template was built entirely using those skills — you can use them to build anything from a simple CRUD app to a full enterprise solution.
 
@@ -135,7 +144,7 @@ To adapt this template for a different domain (e.g., CRM, HR, Asset Management):
 6. **Generate new services** — Run `pac code add-datasource` for each table
 7. **Deploy** — `npm run build` and `pac code push`
 
-Or just point Claude Code at this repo with the [Power Platform Skills](https://github.com/DanielKerridge/claude-code-power-platform-skills) installed and ask it to build what you need.
+Or install the [Power Platform Skills](https://github.com/DanielKerridge/claude-code-power-platform-skills), point Claude Code at this repo as a reference, and ask it to build what you need.
 
 ## License
 
