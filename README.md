@@ -19,7 +19,6 @@ This app implements a **Project Management** domain to showcase diverse Datavers
 - **Left Navigation** — Collapsible sidebar with grouped nav items matching MDA sitemap structure
 - **Global Search** — Cross-entity search modal
 - **Record Set Navigator** — Browse through records without returning to the grid
-- **Bulk Operations** — Multi-select rows for bulk edit, delete, assign
 
 ### Data Model
 
@@ -49,50 +48,42 @@ Plus 4 global option sets, 4 local option sets, 1 formula column, and 3 alternat
 
 ## Quick Start
 
+### Prerequisites
+
+1. **Enable Code Apps** in your environment — an admin must turn on Code App operations in the [Power Platform Admin Center](https://admin.powerplatform.microsoft.com/) under your environment's settings before `pac code push` will work.
+
 ### Option A: Deploy the Template As-Is
 
 Use this if you want to run the Project Management template in your own environment.
 
-1. **Import the Dataverse schema**
+1. **Import the Dataverse solution**
    - Go to [Power Apps Maker Portal](https://make.powerapps.com/) > your environment > Solutions > Import
    - Upload `solutions/MDATemplate_1_0_0_3.zip`
    - Follow the import wizard and publish all customizations
 
-2. **Clone and install**
+2. **Create sample data**
+   - Open the imported **MDA Template** Model-Driven App from the Apps area
+   - Navigate to **Team Members** and create a few team members (name, role, email, department)
+   - Navigate to **Categories** and create categories (e.g., Development, Design, Testing)
+   - You can now create Projects, Tasks, Time Entries, and Assignments that reference these records
+
+3. **Clone and install the Code App**
    ```bash
    git clone https://github.com/DanielKerridge/MDATemplate-PowerPlatform.git
    cd MDATemplate-PowerPlatform/code-app
    npm install
    ```
 
-3. **Configure environment**
+4. **Configure environment**
    ```bash
    cp power.config.json.example power.config.json
    ```
    Edit `power.config.json` — replace `YOUR_APP_ID` and `YOUR_ENVIRONMENT_ID` with your values from the Power Apps maker portal.
 
-4. **Authenticate and initialize**
+5. **Authenticate and deploy**
    ```bash
    pac auth create --environment https://yourorg.crm.dynamics.com/
-   pac code init -n "MDA Template" -env YOUR_ENVIRONMENT_ID
    ```
-
-5. **Generate data source schemas**
-   ```bash
-   pac code add-datasource --name projects --table pic_project
-   pac code add-datasource --name tasks --table pic_task
-   pac code add-datasource --name teammembers --table pic_teammember
-   pac code add-datasource --name timeentries --table pic_timeentry
-   pac code add-datasource --name categories --table pic_category
-   pac code add-datasource --name projectassignments --table pic_projectassignment
-   ```
-
-6. **Run locally**
-   ```bash
-   npm run dev
-   ```
-
-7. **Deploy to Power Platform**
    ```powershell
    .\scripts\deploy.ps1 -Environment "https://yourorg.crm.dynamics.com/"
    ```
