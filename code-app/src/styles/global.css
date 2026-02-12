@@ -1,0 +1,138 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* MDA-style scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #c8c6c4;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a19f9d;
+}
+
+/* Shimmer animation for loading skeletons */
+@keyframes shimmer {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* Responsive: collapse multi-column form grids to 1 column on narrow screens */
+@media (max-width: 800px) {
+  [style*="grid-template-columns: repeat(2"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="grid-template-columns: repeat(3"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Print stylesheet */
+@media print {
+  /* Hide non-essential UI */
+  [data-print-hide] { display: none !important; }
+
+  /* Remove shadows and backgrounds for cleaner print */
+  body { background: #fff !important; }
+  * { box-shadow: none !important; }
+
+  /* Remove height constraints so all content prints */
+  html, body, #root {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Content area should flow naturally */
+  #root > div {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  #root > div > div {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  #root > div > div > div {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Grid container: show all rows, no scroll */
+  [role="region"][aria-label*="data grid"] {
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+  }
+
+  /* Table: full width, visible overflow */
+  table {
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  thead {
+    display: table-header-group;
+  }
+
+  /* Hide interactive-only elements */
+  [data-print-hide-grid] { display: none !important; }
+  [data-print-hide-cell] { display: none !important; }
+
+  /* Clean card appearance */
+  [class*="root"] {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border: 1px solid #ddd !important;
+  }
+
+  /* Print header */
+  .print-header {
+    display: block !important;
+    padding: 16px 0;
+    border-bottom: 2px solid #000;
+    margin-bottom: 16px;
+  }
+  .print-header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .print-header .print-date {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+  }
+
+  /* Form sections print cleanly */
+  [class*="FormSection"],
+  [class*="formSection"] {
+    page-break-inside: avoid;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 0.75in;
+    size: landscape;
+  }
+}

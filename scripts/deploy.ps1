@@ -1,10 +1,9 @@
 # Deploy Code App to Dataverse
-# Usage: .\scripts\deploy.ps1
-# Environment: https://org7b63e9d1.crm6.dynamics.com/
-# Solution: MDATemplate (friendly name: "MDA Template")
+# Usage: .\scripts\deploy.ps1 -Environment "https://yourorg.crm.dynamics.com/" -SolutionName "MDA Template"
 
 param(
-    [string]$Environment = "https://org7b63e9d1.crm6.dynamics.com/",
+    [Parameter(Mandatory=$true)]
+    [string]$Environment,
     [string]$SolutionName = "MDA Template"
 )
 

@@ -1,31 +1,41 @@
 import { useNavigate } from "react-router-dom";
-import { makeStyles, mergeClasses } from "@fluentui/react-components";
+import { makeStyles } from "@fluentui/react-components";
 import {
   ArrowLeftRegular,
-  AddRegular,
   DeleteRegular,
   ArrowSyncRegular,
-  MoreHorizontalRegular,
   ShareRegular,
-  ChevronDownRegular,
   DataBarVerticalRegular,
-  EyeRegular,
+  SparkleRegular,
   MailRegular,
   PlayRegular,
+  OpenRegular,
   DocumentRegular,
-  TableRegular,
+  EditRegular,
+  CheckmarkCircleRegular,
+  DismissCircleRegular,
+  PersonRegular,
   ArrowDownloadRegular,
+  ArrowUploadRegular,
+  DocumentTableRegular,
+  ShieldCheckmarkRegular,
+  ListRegular,
 } from "@fluentui/react-icons";
+import { CommandBarButton } from "./CommandBarButton";
+import { CommandBarMenuButton } from "./CommandBarMenuButton";
+import type { MenuItemDef } from "./CommandBarMenuButton";
+import { CommandBarOverflowMenu } from "./CommandBarOverflowMenu";
 
 export interface CommandBarAction {
   key: string;
   label: string;
-  icon: typeof AddRegular;
+  icon: React.ComponentType;
   onClick: () => void;
   primary?: boolean;
   disabled?: boolean;
   danger?: boolean;
   hasDropdown?: boolean;
+  tooltip?: string;
 }
 
 interface EntityCommandBarProps {
@@ -33,54 +43,48 @@ interface EntityCommandBarProps {
   onRefresh?: () => void;
   onBack?: () => void;
   onDelete?: () => void;
+  onShowChart?: () => void;
+  onEmailLink?: () => void;
+  onFlow?: () => void;
+  onShare?: () => void;
+  onExportExcel?: () => void;
+  onOpenNewWindow?: () => void;
+  chartActive?: boolean;
   /** Show standard MDA decorative actions (default: true) */
   showMDAActions?: boolean;
+  /** Items for the Delete dropdown menu in list view */
+  deleteMenuItems?: MenuItemDef[];
+  /** Number of selected rows — changes command bar to selection mode */
+  selectedCount?: number;
+  /** Called when Edit is clicked (selection mode) */
+  onEdit?: () => void;
+  /** Called when Activate is clicked (selection mode) */
+  onActivate?: () => void;
+  /** Called when Deactivate is clicked (selection mode) */
+  onDeactivate?: () => void;
+  /** Called when Assign is clicked (selection mode) */
+  onAssign?: () => void;
+  /** Called when a report is clicked */
+  onRunReport?: () => void;
+  /** Record set navigator toggle (form mode) */
+  onToggleRecordSet?: () => void;
+  /** Whether record set panel is currently open */
+  recordSetOpen?: boolean;
+  /** Record set info text, e.g. "1 of 6" */
+  recordSetInfo?: string;
 }
 
 const useStyles = makeStyles({
   root: {
     display: "flex",
     alignItems: "center",
-    height: "40px",
-    padding: "0 12px",
+    height: "44px",
+    padding: "0 4px",
     backgroundColor: "#FFFFFF",
     flexShrink: 0,
-    borderBottom: "1px solid #edebe9",
-  },
-  btn: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "4px",
-    padding: "4px 8px",
-    cursor: "pointer",
-    border: "none",
-    backgroundColor: "transparent",
-    color: "#242424",
-    fontSize: "14px",
-    whiteSpace: "nowrap",
-    borderRadius: "2px",
-    lineHeight: "1",
-    ":hover": {
-      backgroundColor: "#f3f2f1",
-    },
-  },
-  btnDisabled: {
-    color: "#a19f9d",
-    cursor: "default",
-    ":hover": {
-      backgroundColor: "transparent",
-    },
-  },
-  btnIcon: {
-    fontSize: "16px",
-    color: "#605e5c",
-    display: "flex",
-  },
-  chevron: {
-    fontSize: "8px",
-    color: "#605e5c",
-    marginLeft: "1px",
-    display: "flex",
+    borderRadius: "4px",
+    margin: "8px 0 4px",
+    boxShadow: "rgba(0,0,0,0.12) 0 0 2px 0, rgba(0,0,0,0.14) 0 2px 4px 0",
   },
   divider: {
     width: "1px",
@@ -96,122 +100,354 @@ export function EntityCommandBar({
   onRefresh,
   onBack,
   onDelete,
+  onShowChart,
+  onEmailLink,
+  onFlow,
+  onShare,
+  onExportExcel,
+  onOpenNewWindow,
+  chartActive,
   showMDAActions = true,
+  deleteMenuItems,
+  selectedCount = 0,
+  onEdit,
+  onActivate,
+  onDeactivate,
+  onAssign,
+  onRunReport,
+  onToggleRecordSet,
+  recordSetOpen,
+  recordSetInfo,
 }: EntityCommandBarProps) {
   const styles = useStyles();
   const navigate = useNavigate();
 
   const handleBack = onBack ?? (() => navigate(-1));
+  const hasSelection = selectedCount > 0;
 
   return (
-    <div className={styles.root} role="toolbar">
+    <div className={styles.root} role="toolbar" data-print-hide>
       {/* Back */}
-      <button className={styles.btn} onClick={handleBack} type="button">
-        <span className={styles.btnIcon}><ArrowLeftRegular /></span>
-      </button>
+      <CommandBarButton icon={ArrowLeftRegular} label="" onClick={handleBack} />
 
-      <div className={styles.divider} />
-
-      {/* Show Chart — appears active like MDA */}
-      {showMDAActions && (
-        <button className={styles.btn} type="button">
-          <span className={styles.btnIcon}><DataBarVerticalRegular /></span>
-          <span>Show Chart</span>
-        </button>
+      {/* Open in new window — form-level only */}
+      {!showMDAActions && (
+        <CommandBarButton
+          icon={OpenRegular}
+          label=""
+          onClick={onOpenNewWindow ?? (() => window.open(window.location.href, "_blank"))}
+        />
       )}
 
-      {/* Entity-specific actions */}
-      {actions.map((action) => (
-        <button
-          key={action.key}
-          className={mergeClasses(
-            styles.btn,
-            action.disabled && styles.btnDisabled
-          )}
-          onClick={action.disabled ? undefined : action.onClick}
-          disabled={action.disabled}
-          type="button"
-        >
-          <span className={styles.btnIcon}><action.icon /></span>
-          <span>{action.label}</span>
-          {action.hasDropdown && (
-            <span className={styles.chevron}><ChevronDownRegular /></span>
-          )}
-        </button>
-      ))}
-
-      {/* Delete — with dropdown chevron like MDA */}
-      {showMDAActions && (
-        <button
-          className={styles.btn}
-          onClick={onDelete ?? undefined}
-          type="button"
-        >
-          <span className={styles.btnIcon}><DeleteRegular /></span>
-          <span>Delete</span>
-          <span className={styles.chevron}><ChevronDownRegular /></span>
-        </button>
+      {/* Record set navigator icon — form-level only */}
+      {!showMDAActions && onToggleRecordSet && (
+        <CommandBarButton
+          icon={ListRegular}
+          label=""
+          onClick={onToggleRecordSet}
+          active={recordSetOpen}
+          tooltip={recordSetInfo ? `Record ${recordSetInfo}` : "Open record set navigator"}
+        />
       )}
 
       <div className={styles.divider} />
 
-      {/* Refresh */}
-      {onRefresh && (
-        <button className={styles.btn} onClick={onRefresh} type="button">
-          <span className={styles.btnIcon}><ArrowSyncRegular /></span>
-          <span>Refresh</span>
-        </button>
+      {/* Show Chart — list view, both modes */}
+      {showMDAActions && (
+        <CommandBarButton
+          icon={DataBarVerticalRegular}
+          label="Show Chart"
+          onClick={onShowChart}
+          active={chartActive}
+        />
       )}
 
-      {/* MDA standard actions — all appear active like real MDA */}
-      {showMDAActions && (
+      {/* === SELECTION MODE === */}
+      {showMDAActions && hasSelection ? (
         <>
-          <button className={styles.btn} type="button">
-            <span className={styles.btnIcon}><EyeRegular /></span>
-            <span>Visualize this view</span>
-          </button>
-          <button className={styles.btn} type="button">
-            <span className={styles.btnIcon}><MailRegular /></span>
-            <span>Email a Link</span>
-            <span className={styles.chevron}><ChevronDownRegular /></span>
-          </button>
-          <button className={styles.btn} type="button">
-            <span className={styles.btnIcon}><PlayRegular /></span>
-            <span>Flow</span>
-            <span className={styles.chevron}><ChevronDownRegular /></span>
-          </button>
-          <button className={styles.btn} type="button">
-            <span className={styles.btnIcon}><DocumentRegular /></span>
-            <span>Run Report</span>
-            <span className={styles.chevron}><ChevronDownRegular /></span>
-          </button>
-          <button className={styles.btn} type="button">
-            <span className={styles.btnIcon}><TableRegular /></span>
-            <span>Excel Templates</span>
-            <span className={styles.chevron}><ChevronDownRegular /></span>
-          </button>
-          <button className={styles.btn} type="button">
-            <span className={styles.btnIcon}><ArrowDownloadRegular /></span>
-            <span>Export to Excel</span>
-            <span className={styles.chevron}><ChevronDownRegular /></span>
-          </button>
+          <CommandBarButton
+            icon={EditRegular}
+            label="Edit"
+            onClick={onEdit}
+          />
+          <CommandBarButton
+            icon={CheckmarkCircleRegular}
+            label="Activate"
+            onClick={onActivate}
+          />
+          <CommandBarButton
+            icon={DismissCircleRegular}
+            label="Deactivate"
+            onClick={onDeactivate}
+          />
+
+          {/* Delete */}
+          {deleteMenuItems && deleteMenuItems.length > 0 ? (
+            <CommandBarMenuButton
+              icon={DeleteRegular}
+              label="Delete"
+              items={deleteMenuItems}
+            />
+          ) : (
+            <CommandBarButton
+              icon={DeleteRegular}
+              label="Delete"
+              onClick={onDelete}
+              hasDropdown
+            />
+          )}
+
+          <CommandBarButton
+            icon={PersonRegular}
+            label="Assign"
+            onClick={onAssign}
+          />
+          <CommandBarButton
+            icon={ShareRegular}
+            label="Share"
+            onClick={onShare}
+          />
+
+          <CommandBarMenuButton
+            icon={MailRegular}
+            label="Email a Link"
+            items={[
+              {
+                key: "email-link",
+                label: "Email a Link",
+                icon: MailRegular,
+                onClick: () => onEmailLink?.(),
+              },
+            ]}
+          />
+          <CommandBarMenuButton
+            icon={PlayRegular}
+            label="Flow"
+            items={[
+              {
+                key: "see-flows",
+                label: "See your flows",
+                onClick: () => onFlow?.(),
+              },
+              {
+                key: "create-flow",
+                label: "Create a flow",
+                onClick: () => onFlow?.(),
+              },
+            ]}
+          />
+          <CommandBarMenuButton
+            icon={DocumentRegular}
+            label="Run Report"
+            items={[
+              { key: "report-wizard", label: "Report Wizard", onClick: onRunReport ?? (() => {})},
+              { key: "report-summary", label: "Project Summary", onClick: onRunReport ?? (() => {})},
+              { key: "report-created", label: "Record Created/Modified", onClick: onRunReport ?? (() => {})},
+            ]}
+          />
+          <CommandBarMenuButton
+            icon={DocumentTableRegular}
+            label="Word Templates"
+            items={[
+              {
+                key: "word-template",
+                label: "No templates available",
+                onClick: () => {},
+                disabled: true,
+              },
+            ]}
+          />
+          <CommandBarButton
+            icon={ArrowDownloadRegular}
+            label="Export to Excel"
+            onClick={onExportExcel}
+          />
+        </>
+      ) : showMDAActions ? (
+        /* === DEFAULT MODE (no selection) === */
+        <>
+          {/* Entity-specific actions (e.g. + New) */}
+          {actions.map((action) => (
+            <CommandBarButton
+              key={action.key}
+              icon={action.icon}
+              label={action.label}
+              onClick={action.onClick}
+              primary={action.primary}
+              disabled={action.disabled}
+              danger={action.danger}
+              hasDropdown={action.hasDropdown}
+              tooltip={action.tooltip}
+            />
+          ))}
+
+          {/* Delete */}
+          {deleteMenuItems && deleteMenuItems.length > 0 ? (
+            <CommandBarMenuButton
+              icon={DeleteRegular}
+              label="Delete"
+              items={deleteMenuItems}
+            />
+          ) : onDelete ? (
+            <CommandBarButton
+              icon={DeleteRegular}
+              label="Delete"
+              onClick={onDelete}
+              hasDropdown
+            />
+          ) : (
+            <CommandBarButton
+              icon={DeleteRegular}
+              label="Delete"
+              hasDropdown
+              disabled
+            />
+          )}
+
+          <div className={styles.divider} />
+
+          <CommandBarButton icon={ArrowSyncRegular} label="Refresh" onClick={onRefresh} />
+          <CommandBarButton
+            icon={SparkleRegular}
+            label="Visualize this view"
+            iconColor="#d29200"
+            disabled
+          />
+          <CommandBarMenuButton
+            icon={MailRegular}
+            label="Email a Link"
+            items={[
+              {
+                key: "email-link",
+                label: "Email a Link",
+                icon: MailRegular,
+                onClick: () => onEmailLink?.(),
+              },
+            ]}
+          />
+          <CommandBarMenuButton
+            icon={PlayRegular}
+            label="Flow"
+            items={[
+              {
+                key: "see-flows",
+                label: "See your flows",
+                onClick: () => onFlow?.(),
+              },
+              {
+                key: "create-flow",
+                label: "Create a flow",
+                onClick: () => onFlow?.(),
+              },
+            ]}
+          />
+          <CommandBarMenuButton
+            icon={DocumentRegular}
+            label="Run Report"
+            items={[
+              { key: "report-wizard", label: "Report Wizard", onClick: onRunReport ?? (() => {})},
+              { key: "report-summary", label: "Project Summary", onClick: onRunReport ?? (() => {})},
+              { key: "report-created", label: "Record Created/Modified", onClick: onRunReport ?? (() => {})},
+            ]}
+          />
+          <CommandBarMenuButton
+            icon={DocumentTableRegular}
+            label="Excel Templates"
+            items={[
+              {
+                key: "excel-template",
+                label: "No templates available",
+                onClick: () => {},
+                disabled: true,
+              },
+            ]}
+          />
+          <CommandBarButton
+            icon={ArrowDownloadRegular}
+            label="Export to Excel"
+            onClick={onExportExcel}
+            hasDropdown
+          />
+          <CommandBarButton
+            icon={ArrowUploadRegular}
+            label="Import from Excel"
+            disabled
+            hasDropdown
+          />
+        </>
+      ) : (
+        /* === FORM MODE (not list) === */
+        <>
+          {actions.map((action) => (
+            <CommandBarButton
+              key={action.key}
+              icon={action.icon}
+              label={action.label}
+              onClick={action.onClick}
+              primary={action.primary}
+              disabled={action.disabled}
+              danger={action.danger}
+              hasDropdown={action.hasDropdown}
+              tooltip={action.tooltip}
+            />
+          ))}
+          {onDelete && (
+            <CommandBarButton icon={DeleteRegular} label="Delete" onClick={onDelete} />
+          )}
+          {onRefresh && (
+            <>
+              <div className={styles.divider} />
+              <CommandBarButton icon={ArrowSyncRegular} label="Refresh" onClick={onRefresh} />
+            </>
+          )}
+          <CommandBarButton icon={ShieldCheckmarkRegular} label="Check Access" disabled />
+          <CommandBarMenuButton
+            icon={DocumentTableRegular}
+            label="Word Templates"
+            items={[
+              { key: "word-template", label: "No templates available", onClick: () => {}, disabled: true },
+            ]}
+          />
+          <CommandBarMenuButton
+            icon={DocumentRegular}
+            label="Run Report"
+            items={[
+              { key: "report-wizard", label: "Report Wizard", onClick: onRunReport ?? (() => {}) },
+              { key: "report-created", label: "Record Created/Modified", onClick: onRunReport ?? (() => {}) },
+            ]}
+          />
+          <div style={{ flex: 1 }} />
+          <div className={styles.divider} />
+          <CommandBarMenuButton
+            icon={ShareRegular}
+            label="Share"
+            items={[
+              { key: "copy-link", label: "Copy link", onClick: () => onShare?.() },
+            ]}
+          />
         </>
       )}
 
-      {/* Overflow */}
-      <button className={styles.btn} type="button">
-        <span className={styles.btnIcon}><MoreHorizontalRegular /></span>
-      </button>
+      {/* Spacer pushes Share to far right */}
+      {showMDAActions && <div style={{ flex: 1 }} />}
 
-      <div className={styles.divider} />
-
-      {/* Share */}
-      {showMDAActions && (
-        <button className={styles.btn} type="button">
-          <span className={styles.btnIcon}><ShareRegular /></span>
-          <span>Share</span>
-          <span className={styles.chevron}><ChevronDownRegular /></span>
-        </button>
+      {/* Overflow + Share — only in non-selection default mode */}
+      {showMDAActions && !hasSelection && (
+        <>
+          <CommandBarOverflowMenu onExportExcel={onExportExcel} />
+          <div className={styles.divider} />
+          <CommandBarMenuButton
+            icon={ShareRegular}
+            label="Share"
+            items={[
+              {
+                key: "copy-link",
+                label: "Copy link",
+                onClick: () => onShare?.(),
+              },
+            ]}
+          />
+        </>
       )}
     </div>
   );

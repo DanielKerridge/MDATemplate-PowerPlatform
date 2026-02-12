@@ -1,13 +1,52 @@
+# Dependencies
 node_modules/
 dist/
 .vite/
-*.log
+
+# Environment & secrets
 .env
 .env.*
-nul
+*.log
+
+# Power Apps environment-specific config (use power.config.json.example as template)
+code-app/power.config.json
+
+# IDE / editor
+.cursor/
+.vscode/
+*.tsbuildinfo
+
+# Auto-generated Power schemas (regenerate with `pac code add-datasource`)
+code-app/.power/
+
+# OS artifacts
 .DS_Store
 Thumbs.db
-*.tsbuildinfo
+nul
+
+# Internal development artifacts (environment-specific scripts, tests, screenshots)
+scripts/
+!scripts/deploy.ps1
+tests/
+screenshots/
 comparisonimages/
+
+# Agent planning artifacts
+.claude/
+DATA_ARCHITECT_FINAL.md
+EXTRACTED_FINAL_PLAN.md
+SKEPTIC_FINAL.md
+UX_DESIGNER_FINAL.md
+extract_agent_designs.py
+extract_final_plan.py
+extract_last_messages.py
+
+# Internal tracking (environment-specific data)
+parity_gaps.json
+progress.md
+scenario-tracking.md
+docs/build-learnings.txt
+
+# Saved web pages
 *.html
 *_files/
